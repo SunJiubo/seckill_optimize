@@ -31,6 +31,6 @@ public interface GoodsDAO {
             TABLE_NAME_GOODS,TABLE_NAME_GOODS_ANAME," on sg.goods_id =g.id where g.id = #{goodsId}"})
     public GoodsVo getGoodsVoByGoodsId(@Param("goodsId") long goodsId);
 
-    @Update({"update ",TABLE_NAME_SKGOODS," set stock_count=stock_count-1 where goods_id = #{goodsId}"})
+    @Update({"update ",TABLE_NAME_SKGOODS," set stock_count=stock_count-1 where goods_id = #{goodsId} and stock_count>0"})
     public int reduceStock(SeckillGoods g);
 }

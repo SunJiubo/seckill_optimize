@@ -4,6 +4,7 @@ import com.nsmall.seckill.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Component;
 
 @Mapper
@@ -17,4 +18,6 @@ public interface UserDAO {
     @Select({"select ",SELECT_FIELDS, " from ",TABLE_NAME," where id=#{id}"})
     public User getById(@Param("id") long id);
 
+    @Update({"update ",TABLE_NAME," set password=#{password} where id = #{id}"})
+    public void update(User toBeUpdate);
 }

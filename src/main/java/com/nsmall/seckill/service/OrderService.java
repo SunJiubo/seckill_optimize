@@ -4,6 +4,8 @@ import com.nsmall.seckill.dao.OrderDAO;
 import com.nsmall.seckill.domain.OrderInfo;
 import com.nsmall.seckill.domain.SeckillOrder;
 import com.nsmall.seckill.domain.User;
+import com.nsmall.seckill.redis.OrderKey;
+import com.nsmall.seckill.redis.RedisService;
 import com.nsmall.seckill.vo.GoodsVo;
 import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class OrderService {
     @Autowired
     OrderDAO orderDAO;
 
+    @Autowired
+    RedisService redisService;
+
     public OrderInfo creatOrder(User user, GoodsVo goods) {
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setCreateDate(new Date());
@@ -40,11 +45,14 @@ public class OrderService {
         seckillOrder.setOrderId(orderId);
         seckillOrder.setUserId(user.getId());
         orderDAO.insertSeckillOrder(seckillOrder);
+
+        redisService.set(OrderKey.getSeckillOrderByUidGid,"" + user.getId() + "_" + goods.getId(),seckillOrder);
         return orderInfo;
     }
 
     public SeckillOrder getSeckillOrderByUserIdGoodsId(Long userId, long goodsId) {
-        return orderDAO.getSeckillOrderByUserIdGoodsId(userId,goodsId);
+//        return orderDAO.getSeckillOrderByUserIdGoodsId(userId,goodsId);
+        return redisService.get(OrderKey.getSeckillOrderByUidGid,"" + userId + "_" + goodsId,SeckillOrder.class);
     }
 
     public OrderInfo getSeckillOrderByUserIdOrderId(long userId, long orderId) {
@@ -53,5 +61,9 @@ public class OrderService {
 
     public OrderInfo getSeckillOrderByUserId(Long userId) {
         return orderDAO.getSeckillOrderByUserId(userId);
+    }
+
+    public OrderInfo getSeckillOrderById(long orderId) {
+        return orderDAO.getSeckillOrderById(orderId);
     }
 }

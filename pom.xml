@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.nsmall</groupId>
-    <artifactId>seckill</artifactId>
+    <artifactId>seckill_optimize</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>seckill</name>
+    <name>seckill_optimize</name>
     <packaging>jar</packaging>
     <description>Demo project for Spring Boot</description>
 
