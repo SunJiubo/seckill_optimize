@@ -1,6 +1,7 @@
 package com.nsmall.seckill.controller;
 
 import com.nsmall.seckill.domain.User;
+import com.nsmall.seckill.rabbitmq.MQSender;
 import com.nsmall.seckill.redis.UserKey;
 import com.nsmall.seckill.result.CodeMsg;
 import com.nsmall.seckill.result.Result;
@@ -19,26 +20,38 @@ public class DemoController {
     @Autowired
     RedisService redisService;
 
+    @Autowired
+    MQSender sender;
 
-//    @Autowired
-//    MQSender sender;
+    @RequestMapping("/mq")
+    @ResponseBody
+    public Result<String> mq(){
+        sender.send("hello,imooc");
+        return Result.success("hello, world");
+    }
 
-//    @RequestMapping("/mq")
-//    @ResponseBody
-//    public Result<String> mq() {
-//        sender.send("hello,imooc");
-//        return Result.success("Hello，world");
-//    }
+    @RequestMapping("/mq/header")
+    @ResponseBody
+    public Result<String> header() {
+		sender.sendHeader("hello,imooc");
+        return Result.success("Hello，world");
+    }
 
-//    @RequestMapping("/mq/topic")
-//    @ResponseBody
-//    public Result<String> topic() {
-//        sender.sendTopic("hello,imooc");
-//        return Result.success("Hello，world");
-//    }
-//    @Autowired
-//    UserService userService;
-//
+	@RequestMapping("/mq/fanout")
+    @ResponseBody
+    public Result<String> fanout() {
+		sender.sendFanout("hello,imooc");
+        return Result.success("Hello，world");
+    }
+
+	@RequestMapping("/mq/topic")
+    @ResponseBody
+    public Result<String> topic() {
+		sender.sendTopic("hello,imooc");
+        return Result.success("Hello，world");
+    }
+
+
     @RequestMapping("/")
     @ResponseBody
     String home() {
