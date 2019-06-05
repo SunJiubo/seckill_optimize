@@ -1,5 +1,6 @@
 package com.nsmall.seckill.config;
 
+import com.nsmall.seckill.access.UserContext;
 import com.nsmall.seckill.domain.User;
 import com.nsmall.seckill.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -32,29 +33,8 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
                                   ModelAndViewContainer modelAndViewContainer,
                                   NativeWebRequest nativeWebRequest,
                                   WebDataBinderFactory webDataBinderFactory) throws Exception {
-        HttpServletResponse response = nativeWebRequest.getNativeResponse(HttpServletResponse.class);
-        HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
-
-        String paramToken = request.getParameter(UserService.COOKIE_NAME_TOKEN);
-        String cookieToken = getCookieValue(request,UserService.COOKIE_NAME_TOKEN);
-        if(StringUtils.isEmpty(paramToken)&&StringUtils.isEmpty(cookieToken)){
-            return null;
-        }
-        String token = StringUtils.isEmpty(paramToken)?cookieToken:paramToken;
-        return userService.getByToken(response,token);
+        return UserContext.getUser();
     }
 
-    private String getCookieValue(HttpServletRequest request, String cookieNameToken) {
-        Cookie[] cookies = request.getCookies();
-        if(cookies==null||cookies.length<=0){
-            return null;
-        }
-        for (Cookie cookie :
-                cookies) {
-            if(cookie.getName().equals(cookieNameToken)){
-                return cookie.getValue();
-            }
-        }
-        return null;
-    }
+
 }

@@ -46,4 +46,10 @@ public interface OrderDAO {
 
     @Select({"select ",SELECT_FIELDS_ORDER_INFO," from",TABLE_NAME_ORDER_INFO," where id=#{orderId}"})
     public OrderInfo getSeckillOrderById(@Param("orderId") long orderId);
+
+    @Delete({"delete from",TABLE_NAME_ORDER_INFO})
+    public void deleteOrders();
+
+    @Delete({"delete from ",TABLE_NAME_SKORDER})
+    public void deleteSeckillOrders();
 }

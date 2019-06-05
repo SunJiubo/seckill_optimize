@@ -33,4 +33,7 @@ public interface GoodsDAO {
 
     @Update({"update ",TABLE_NAME_SKGOODS," set stock_count=stock_count-1 where goods_id = #{goodsId} and stock_count>0"})
     public int reduceStock(SeckillGoods g);
+
+    @Update({"update ",TABLE_NAME_SKGOODS,"set stock_count = #{stockCount} where goods_id = #{goodsId}"})
+    public int resetStock(SeckillGoods g);
 }
